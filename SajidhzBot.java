@@ -6,6 +6,7 @@ import robocode.BravoBot;
 import robocode.HitByBulletEvent;
 import robocode.HitWallEvent;
 import robocode.ScannedRobotEvent;
+import javat.awt.Color;
 
 public class SajidhzBot extends BravoBot {
 	
