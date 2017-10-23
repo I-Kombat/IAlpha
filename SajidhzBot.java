@@ -1,6 +1,6 @@
 package robocodet;
 
-
+import robocode.HitRobotEvent;
 import robocode.AlphaBot;
 import robocode.BravoBot;
 import robocode.HitByBulletEvent;
@@ -9,63 +9,62 @@ import robocode.ScannedRobotEvent;
 
 public class SajidhzBot extends BravoBot {
 	
+	int turnDirection = 1; // Clockwise or counterclockwise
+
+	/**
+	 * run: Spin around looking for a target
+	 */
 	public void run() {
-        // Initialization of the robot should be put here
-        // After trying out your robot, try uncommenting the import at the top,
-        // and the next line:
-        // setColors(Color.blue,Color.blue,Color.grey,Color.red,Color.green); // body,gun,radar
-        // Robot main loop
-        while(true) {
-            // Replace the next 4 lines with any behavior you would like
-            double distance = Math.random()*300;
-            double angle = Math.random()*180;
-            turnRight(angle);
-            ahead(distance);
-            ahead(100);
-            turnGunRight(90);
-            back(100);
-            turnGunRight(90);
-        }
-    }
+		// Set colors
+		setBodyColor(Color.lightGray);
+		setGunColor(Color.gray);
+		setRadarColor(Color.darkGray);
 
-    /**
-     * onScannedRobot: What to do when you see another robot
-     */
-    public void onScannedRobot(ScannedRobotEvent e) {
-        // Replace the next line with any behavior you would like
-        double distance = e.getDistance();
+		while (true) {
+			turnRight(5 * turnDirection);
+		}
+	}
 
-        if(distance<200)
-        {
-           fire(3.5);
-        }
-        else if(distance<500)
-        {
-           fire(2.5);
-        }
-        else if(distance<800)
-        {
-           fire(1.5);
-        }
-        else
-        {
-           fire(0.5);
-        }
-    }
+	/**
+	 * onScannedRobot:  We have a target.  Go get it.
+	 */
+	public void onRobotDetected(ScannedRobotEvent e) {
 
-    /**
-     * onHitByBullet: What to do when you're hit by a bullet
-     */
-    public void onHitByBullet(HitByBulletEvent e) {
-        // Replace the next line with any behavior you would like
-        back(10);
-    }
+		if (e.getBearing() >= 0) {
+			turnDirection = 1;
+		} else {
+			turnDirection = -1;
+		}
 
-    /**
-     * onHitWall: What to do when you hit a wall
-     */
-    public void onHitWall(HitWallEvent e) {
-        // Replace the next line with any behavior you would like
-        back(20);
-    }   
+		turnRight(e.getBearing());
+		ahead(e.getDistance() + 5);
+		scan(); // Might want to move ahead again!
+	}
+
+	/**
+	 * onHitRobot:  Turn to face robot, fire hard, and ram him again!
+	 */
+	public void onHitRobot(HitRobotEvent e) {
+		if (e.getBearing() >= 0) {
+			turnDirection = 1;
+		} else {
+			turnDirection = -1;
+		}
+		turnRight(e.getBearing());
+
+		// Determine a shot that won't kill the robot...
+		// We want to ram him instead for bonus points
+		if (e.getEnergy() > 16) {
+			fire(3);
+		} else if (e.getEnergy() > 10) {
+			fire(2);
+		} else if (e.getEnergy() > 4) {
+			fire(1);
+		} else if (e.getEnergy() > 2) {
+			fire(.5);
+		} else if (e.getEnergy() > .4) {
+			fire(.1);
+		}
+		ahead(40); // Ram him again!
+}
 }
