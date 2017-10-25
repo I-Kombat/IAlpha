@@ -1,5 +1,3 @@
-package robocodet;
-
 import robocode.HitRobotEvent;
 import robocode.AlphaBot;
 import robocode.BravoBot;
