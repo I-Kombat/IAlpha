@@ -6,7 +6,7 @@ import robocode.HitWallEvent;
 import robocode.ScannedRobotEvent;
 import java.awt.Color;
 
-public class SajidhzBot extends AlphaBot {
+public class SajidhzBot extends BravoBot {
 	
 	int turnDirection = 1; // Clockwise or counterclockwise
 
@@ -27,7 +27,7 @@ public class SajidhzBot extends AlphaBot {
 	/**
 	 * onScannedRobot:  We have a target.  Go get it.
 	 */
-	public void onRobotDetected(ScannedRobotEvent e) {
+	public void onScannedRobot(ScannedRobotEvent e) {
 
 		if (e.getBearing() >= 0) {
 			turnDirection = 1;
