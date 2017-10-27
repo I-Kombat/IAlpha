@@ -6,7 +6,7 @@ import robocode.HitWallEvent;
 import robocode.ScannedRobotEvent;
 import java.awt.Color;
 
-public class SajidhzBot extends BravoBot {
+public class SajidhzBot extends AlphaBot {
 	
 	int turnDirection = 1; // Clockwise or counterclockwise
 
